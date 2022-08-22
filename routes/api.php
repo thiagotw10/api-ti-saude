@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProdutosPainelController;
+use App\Http\Controllers\SeguimentoProdutosPainelController;
 use App\Http\Controllers\UsuarioAdministradorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,9 +18,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', [UsuarioAdministradorController::class, 'authenticate']);
-
-
-Route::group(['middleware' => ['jwt.verify']], function() {
-
 Route::post('register', [UsuarioAdministradorController::class, 'register']);
+
+Route::group(['middleware' => ['jwt.verify']], function () {
+    // usuarios
+    Route::get('usuarios', [UsuarioAdministradorController::class, 'listarUsuarios']);
+    // fim de usuarios
+
+
+    // produtosPainel
+    Route::get('produtos', [ProdutosPainelController::class, 'listarProdutos']);
+    Route::post('produtos', [ProdutosPainelController::class, 'criarProdutos']);
+    // fim de produtos painel
+
+    // produtosPainel
+    Route::get('seguimentos', [SeguimentoProdutosPainelController::class, 'listarSeguimentos']);
+    Route::post('seguimentos', [SeguimentoProdutosPainelController::class, 'criarSeguimentos']);
+    // fim de produtos painel
 });

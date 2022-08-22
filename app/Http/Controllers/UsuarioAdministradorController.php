@@ -17,9 +17,9 @@ class UsuarioAdministradorController extends Controller
 
         //Request is valid, create new user
         $user = UsuarioAdministrador::create([
-        	'name' => $request->name,
-        	'email' => $request->email,
-        	'password' => bcrypt($request->password)
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
 
         //User created, return success response
@@ -35,24 +35,34 @@ class UsuarioAdministradorController extends Controller
 
         //Crean token
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json([
-                	'success' => false,
-                	'message' => 'Login credentials are invalid.',
+                    'success' => false,
+                    'message' => 'Login credentials are invalid.',
                 ], 400);
             }
         } catch (JWTException $e) {
-    	return $credentials;
+            return $credentials;
             return response()->json([
-                	'success' => false,
-                	'message' => 'Could not create token.',
-                ], 500);
+                'success' => false,
+                'message' => 'Could not create token.',
+            ], 500);
         }
 
- 		//Token created, return with success response and jwt token
+        $user = UsuarioAdministrador::where('email', $request->email)->first();
+        //Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
+            'usuario' => $user,
             'token' => $token,
         ]);
+    }
+
+
+    public function listarUsuarios(Request $request)
+    {
+        $usuarios = UsuarioAdministrador::paginate($request->limit);
+
+        return response($usuarios, 200);
     }
 }
