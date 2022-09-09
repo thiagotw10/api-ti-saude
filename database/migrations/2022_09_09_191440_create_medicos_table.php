@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEspecificacaoProdutosPainelsTable extends Migration
+class CreateMedicosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateEspecificacaoProdutosPainelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('especificacao_produtos_painels', function (Blueprint $table) {
+        Schema::create('medicos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('produto_id');
-            $table->longText('especificacao_do_produto');
+            $table->uuid('med_codigo');
+            $table->unsignedBigInteger('espec_id');
+            $table->string('med_nome');
+            $table->string('med_CRM');
             $table->timestamps();
 
-            $table->foreign('produto_id')->references('id')->on('produtos_painels')->onDelete('cascade');
+            $table->foreign('espec_id')->references('id')->on('especialidades')->onDelete('cascade');
         });
     }
 
@@ -30,6 +32,6 @@ class CreateEspecificacaoProdutosPainelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('especificacao_produtos_painels');
+        Schema::dropIfExists('medicos');
     }
 }

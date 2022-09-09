@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSeguimentoProdutosPainelsTable extends Migration
+class CreateProcedimentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateSeguimentoProdutosPainelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('seguimento_produtos_painels', function (Blueprint $table) {
+        Schema::create('procedimentos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome_seguimento');
-            $table->string('nome_imagem');
-            $table->string('url_imagem');
+            $table->uuid('proc_codigo');
+            $table->string('proc_nome');
+            $table->string('proc_valor');
             $table->timestamps();
-
         });
     }
 
@@ -30,6 +29,6 @@ class CreateSeguimentoProdutosPainelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seguimento_produtos_painels');
+        Schema::dropIfExists('procedimentos');
     }
 }

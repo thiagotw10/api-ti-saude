@@ -35,4 +35,8 @@ class produtosPainel extends Model
         return $this->hasMany(ImagensProdutosPainel::class, 'produto_id');
     }
 
+    public function seguimento(){
+        return $this->hasOne(SeguimentoProdutosPainel::class, 'id');
+    }
+
 }

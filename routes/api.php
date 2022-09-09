@@ -1,10 +1,16 @@
 <?php
 
 use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\ProdutosPainelController;
 use App\Http\Controllers\SeguimentoProdutosPainelController;
 use App\Http\Controllers\UsuarioAdministradorController;
 use App\Models\Clientes;
+use App\Models\Consulta;
+use App\Models\Paciente;
+use App\Models\SeguimentoProdutosPainel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,42 +27,35 @@ use Illuminate\Support\Facades\Route;
 
 // usuario admin
 Route::post('login', [UsuarioAdministradorController::class, 'authenticate']);
-Route::post('register', [UsuarioAdministradorController::class, 'register']);
+Route::post('registrar', [UsuarioAdministradorController::class, 'register']);
 // fim do usuario admin
 
-
-// cliente
-Route::post('cliente/login', [ClientesController::class, 'login']);
-Route::post('cliente/register', [ClientesController::class, 'criarCliente']);
-// fim de cliente
+// cadastrar paciente
+Route::post('pacientes', [PacienteController::class, 'cadastrar']);
+// fim paciente
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 
-    // usuarios
-    Route::get('usuarios', [UsuarioAdministradorController::class, 'listarUsuarios']);
-    // fim de usuarios
 
-    // produtosPainel
-    Route::get('produtos', [ProdutosPainelController::class, 'listarProdutos']);
-    Route::post('produtos', [ProdutosPainelController::class, 'criarProdutos']);
-    // fim de produtos painel
+    Route::get('pacientes', [PacienteController::class, 'listar']);
+    Route::get('pacientes/{nome}', [PacienteController::class, 'buscarPaciente']);
+    Route::put('pacientes/{id}', [PacienteController::class, 'editar']);
+    Route::delete('pacientes/{id}', [PacienteController::class, 'deletar']);
 
-    // produtosPainel
-    Route::get('seguimentos', [SeguimentoProdutosPainelController::class, 'listarSeguimentos']);
-    Route::post('seguimentos', [SeguimentoProdutosPainelController::class, 'criarSeguimentos']);
-    // fim de produtos painel
+    Route::get('medicos', [MedicoController::class, 'listar']);
+    Route::get('medicos/{nome}', [MedicoController::class, 'buscarMedico']);
+    Route::post('medicos', [MedicoController::class, 'cadastrar']);
+    Route::put('medicos/{id}', [MedicoController::class, 'editar']);
+    Route::delete('medicos/{id}', [MedicoController::class, 'deletar']);
+
 });
 
 
-// cliente protegido pelo seu token
-$clientes = Clientes::all();
-
-foreach ($clientes as $cliente) {
-
-    Route::middleware(['auth:sanctum', 'abilities:id:' . $cliente->id])->group(function () use ($cliente) {
-        $nome = str_replace(' ', '-', strtolower($cliente->nome));
-        Route::get('cliente/' .$nome.'/{id}', [ClientesController::class, 'listarCliente']);
-        Route::post('cliente/carrinho/' .$nome.'/{id}', [ClientesController::class, 'carrinhoCliente']);
+$pacientes = Paciente::all();
+foreach ($pacientes as $paciente) {
+    Route::middleware(['auth:sanctum', 'abilities:id:' . $paciente->pac_codigo])->group(function () use ($paciente) {
+        $nome = str_replace(' ', '-', strtolower($paciente->pac_nome));
+        Route::post('consulta/' .$nome.'/'.$paciente->pac_codigo, [ConsultaController::class, 'marcarConsulta']);
     });
 }
-// fim do cliente protegido
+

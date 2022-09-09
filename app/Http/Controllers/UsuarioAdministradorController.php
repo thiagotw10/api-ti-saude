@@ -38,7 +38,7 @@ class UsuarioAdministradorController extends Controller
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Login credentials are invalid.',
+                    'message' => 'Email ou password incorreto.',
                 ], 400);
             }
         } catch (JWTException $e) {

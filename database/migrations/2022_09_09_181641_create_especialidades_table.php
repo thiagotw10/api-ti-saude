@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsuarioAdministradorsTable extends Migration
+class CreateEspecialidadesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateUsuarioAdministradorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuario_administradors', function (Blueprint $table) {
+        Schema::create('especialidades', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->uuid('espec_codigo');
+            $table->string('espec_nome');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateUsuarioAdministradorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuario_administradors');
+        Schema::dropIfExists('especialidades');
     }
 }

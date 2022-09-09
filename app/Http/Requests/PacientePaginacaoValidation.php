@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ClienteLoginValidation extends FormRequest
+class PacientePaginacaoValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,20 +16,23 @@ class ClienteLoginValidation extends FormRequest
         return true;
     }
 
-
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         return [
-            'email' => 'required|email',
-            'senha' => 'required',
+         'registro_por_pagina' => 'required|integer',
         ];
     }
 
     public function messages()
     {
         return [
-            'email.required' => 'Campo obrigátorio.',
-            'senha.required' => 'Campo obrigátorio.',
+            'registro_por_pagina.required' => 'Campo obrigátorio.',
+            'registro_por_pagina.integer' => 'Campo só pode ser numero.',
         ];
     }
 }
