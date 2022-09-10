@@ -12,4 +12,6 @@ class Especialidade extends Model
     protected $fillable = ['espec_codigo', 'espec_nome'];
 
     protected $hidden = ['created_at', 'updated_at', 'id'];
+
+ 
 }

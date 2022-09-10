@@ -13,7 +13,8 @@ class Medico extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'id', 'espec_id'];
 
-    public function especialidade(){
-        return $this->hasOne(Especialidade::class, 'id');
+    public function especialidade()
+    {
+        return $this->hasOne(Especialidade::class, 'id', 'espec_id');
     }
 }

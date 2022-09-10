@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\ProcedimentoController;
 use App\Http\Controllers\ProdutosPainelController;
 use App\Http\Controllers\SeguimentoProdutosPainelController;
 use App\Http\Controllers\UsuarioAdministradorController;
@@ -48,6 +49,14 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::put('medicos/{id}', [MedicoController::class, 'editar']);
     Route::delete('medicos/{id}', [MedicoController::class, 'deletar']);
 
+    Route::get('procedimentos', [ProcedimentoController::class, 'listar']);
+    Route::get('procedimentos/{nome}', [ProcedimentoController::class, 'buscarProcedimento']);
+    Route::post('procedimentos', [ProcedimentoController::class, 'cadastrar']);
+    Route::put('procedimentos/{id}', [ProcedimentoController::class, 'editar']);
+    Route::delete('procedimentos/{id}', [ProcedimentoController::class, 'deletar']);
+
+    Route::get('consultas', [ConsultaController::class, 'listar']);
+    Route::post('consultas', [ConsultaController::class, 'cadastrarConsulta']);
 });
 
 
@@ -55,7 +64,7 @@ $pacientes = Paciente::all();
 foreach ($pacientes as $paciente) {
     Route::middleware(['auth:sanctum', 'abilities:id:' . $paciente->pac_codigo])->group(function () use ($paciente) {
         $nome = str_replace(' ', '-', strtolower($paciente->pac_nome));
-        Route::post('consulta/' .$nome.'/'.$paciente->pac_codigo, [ConsultaController::class, 'marcarConsulta']);
+        Route::get('consultas/' . $nome . '/' . $paciente->pac_codigo, [ConsultaController::class, 'listarConsultasMarcadas']);
+        Route::post('consultas/' . $nome . '/' . $paciente->pac_codigo, [ConsultaController::class, 'MarcarConsulta']);
     });
 }
-

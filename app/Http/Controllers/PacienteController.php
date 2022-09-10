@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PacientePaginacaoValidation;
-use App\Http\Requests\PacienteValidation;
+use App\Models\Vinculo;
+use App\Models\Consulta;
 use App\Models\Paciente;
 use App\Models\PlanoSaude;
-use App\Models\Vinculo;
 use Illuminate\Http\Request;
+use App\Models\ConsultaMarcadas;
+use App\Http\Requests\PacienteValidation;
+use App\Http\Requests\PacientePaginacaoValidation;
 
 class PacienteController extends Controller
 {
@@ -58,8 +60,9 @@ class PacienteController extends Controller
         $pacienteToken->tokens()->delete();
         $token = $pacienteToken->createToken($paciente->pac_nome, ['id:' . $paciente->pac_codigo]);
         $nome = str_replace(' ', '-', strtolower($paciente->pac_nome));
+        $consultas = Consulta::with('medico', 'procedimento')->where('marcada', '0')->get();
 
-        return response(['url_marcar_consulta' => 'api/consulta/'.$nome.'/'.$paciente->pac_codigo, 'token_acesso' => $token->plainTextToken], 201);
+        return response(['url_marcar_consultas_verbo_POST' => 'api/consultas/'.$nome.'/'.$paciente->pac_codigo, 'token_acesso' => $token->plainTextToken,'url_listar_minhas_consultas_marcadas_verbo_GET' => 'api/consultas/'.$nome.'/'.$paciente->pac_codigo, 'token_acesso' => $token->plainTextToken, 'consultas_disponiveis' => $consultas], 201);
     }
 
     public function buscarPaciente($nome)

@@ -51,7 +51,7 @@ class MedicoController extends Controller
     public function buscarMedico($nome)
     {
 
-        $medico = Medico::where('med_nome', 'LIKE', '%' . $nome . '%')->get();
+        $medico = Medico::with('especialidade')->where('med_nome', 'LIKE', '%' . $nome . '%')->get();
 
         if (isset($medico[0]) == '') {
             return response(['status' => 'Médico não encontrado.'], 404);
