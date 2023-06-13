@@ -23,46 +23,13 @@ class PacienteController extends Controller
 
     public function cadastrar(PacienteValidation $request)
     {
-        $pacCodigo = md5(uniqid(rand(), true));
         $paciente = Paciente::create([
-            'pac_codigo' => $pacCodigo,
-            'pac_nome' => $request->paciente['pac_nome'],
-            'pac_dataNascimento' => $request->paciente['pac_dataNascimento'],
-            'pac_telefone' => $request->paciente['pac_telefone']
+            'pac_nome' => $request->pac_nome,
+            'pac_dataNascimento' => $request->pac_dataNascimento,
+            'pac_telefone' => $request->pac_telefone
         ]);
 
-        $planosArrayResponse = [];
-        $vinculoArrayResponse = [];
-        if($request->planos_de_saude){
-            foreach ($request->planos_de_saude as $plano) {
-
-                $planoCodigo = md5(uniqid(rand(), true));
-                $planoSaude = PlanoSaude::create([
-                    'plano_codigo' => $planoCodigo,
-                    'plano_descricao' => $plano['plano_descricao'],
-                    'plano_telefone' => $plano['plano_telefone']
-                ]);
-                array_push($planosArrayResponse, $planoSaude);
-
-                $nrContrato = md5(uniqid(rand(), true));
-                $vinculo = Vinculo::create([
-                    'paciente_id' => $paciente->id,
-                    'plano_saude_id' => $planoSaude->id,
-                    'nr_contrato' => $nrContrato
-                ]);
-                array_push($vinculoArrayResponse, $vinculo);
-            }
-        }
-
-
-        $pacienteToken = Paciente::where('pac_codigo', $paciente->pac_codigo)->first();
-
-        $pacienteToken->tokens()->delete();
-        $token = $pacienteToken->createToken($paciente->pac_nome, ['id:' . $paciente->pac_codigo]);
-        $nome = str_replace(' ', '-', strtolower($paciente->pac_nome));
-        $consultas = Consulta::with('medico', 'procedimento')->where('marcada', '0')->get();
-
-        return response(['url_marcar_consultas_verbo_POST' => 'api/consultas/'.$nome.'/'.$paciente->pac_codigo, 'token_acesso' => $token->plainTextToken,'url_listar_minhas_consultas_marcadas_verbo_GET' => 'api/consultas/'.$nome.'/'.$paciente->pac_codigo, 'token_acesso' => $token->plainTextToken, 'consultas_disponiveis' => $consultas], 201);
+        return response(['paciente' => $paciente], 201);
     }
 
     public function buscarPaciente($nome)
@@ -80,16 +47,15 @@ class PacienteController extends Controller
     public function editar(Request $request, $id)
     {
 
-        $paciente = Paciente::find($id);
-
+        $paciente = Paciente::where('pac_codigo', $id)->first();
         if (!$paciente) {
             return response(['status' => 'Paciente não encontrado.'], 404);
         }
 
         $paciente->update([
-            'pac_codigo' => $paciente->pac_codigo,
             'pac_nome' => $request->pac_nome ? $request->pac_nome : $paciente->pac_nome,
-            'pac_telefone' => $request->pac_telefone ?  $request->pac_telefone :  $paciente->pac_telefone
+            'pac_telefone' => $request->pac_telefone ?  $request->pac_telefone :  $paciente->pac_telefone,
+            'pac_dataNascimento' => $request->pac_dataNascimento ?  $request->pac_dataNascimento :  $paciente->pac_dataNascimento
         ]);
 
         return response($paciente, 200);
@@ -97,12 +63,12 @@ class PacienteController extends Controller
 
     public function deletar($id)
     {
-        $paciente =  Paciente::find($id);
+        $paciente =  Paciente::where('pac_codigo', $id)->first();
         if (!$paciente) {
             return response(['status' => 'Paciente não encontrado nos registros.'], 404);
         }
         $paciente->delete();
 
-        return response($paciente, 200);
+        return response(null, 204);
     }
 }

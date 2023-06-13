@@ -14,14 +14,13 @@ class CreateMedicosTable extends Migration
     public function up()
     {
         Schema::create('medicos', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('med_codigo');
-            $table->unsignedBigInteger('espec_id');
+            $table->bigIncrements('med_codigo');
+            $table->unsignedBigInteger('med_espec');
             $table->string('med_nome');
             $table->string('med_CRM');
             $table->timestamps();
 
-            $table->foreign('espec_id')->references('id')->on('especialidades')->onDelete('cascade');
+            $table->foreign('med_espec')->references('espec_codigo')->on('especialidades')->onDelete('cascade');
         });
     }
 

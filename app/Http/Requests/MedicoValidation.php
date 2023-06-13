@@ -24,23 +24,19 @@ class MedicoValidation extends FormRequest
     public function rules()
     {
         return [
-         'medico' => 'required',
-         'medico.med_nome' => 'required',
-         'medico.med_CRM' => 'required|unique:medicos,med_CRM',
-         'especialidade' => 'required',
-         'especialidade.espec_nome' => 'required',
+         'med_nome' => 'required',
+         'med_CRM' => 'required|unique:medicos,med_CRM',
+         'med_espec' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'medico.required' => 'Objeto obrigátorio.',
-            'medico.med_nome.required' => 'Campo obrigátorio.',
-            'medico.med_CRM.required' => 'Campo obrigátorio.',
-            'medico.med_CRM.unique' => 'Médico com esse CRM já existe.',
-            'especialidade.required' => 'Objeto obrigátorio.',
-            'especialidade.espec_nome.required' => 'Campo obrigátorio.',
+            'med_nome.required' => 'Campo obrigátorio.',
+            'med_CRM.required' => 'Campo obrigátorio.',
+            'med_CRM.unique' => 'Médico com esse CRM já existe.',
+            'med_espec.required' => 'Campo obrigátorio.',
         ];
     }
 }

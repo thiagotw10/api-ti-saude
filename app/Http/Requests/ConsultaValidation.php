@@ -24,22 +24,26 @@ class ConsultaValidation extends FormRequest
     public function rules()
     {
         return [
-         'cons_data' => 'required|date_format:d/m/Y',
-         'cons_hora' => 'required|date_format:H:i:s',
-         'proc_codigo' => 'required',
-         'med_codigo' => 'required',
+         'data' => 'required|date_format:d/m/Y',
+         'hora' => 'required|date_format:H:i:s',
+         'cons_med' => 'required',
+         'cons_pac' => 'required',
+         'vinculo_id' => 'required',
+         'particular' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'proc_codigo.required' => 'Campo obrigátorio.',
-            'med_codigo.required' => 'Campo obrigátorio.',
-            'cons_data.required' => 'Campo obrigátorio.',
-            'cons_hora.required' => 'Campo obrigátorio.',
-            'cons_data.date_format' => 'Campo invalido! Formato de exemplo: 14/11/1994.',
-            'cons_hora.date_format' => 'Campo invalido! Formato de exemplo: 12:59:12.',
+            'data.required' => 'Campo obrigátorio.',
+            'hora.required' => 'Campo obrigátorio.',
+            'cons_med.required' => 'Campo obrigátorio.',
+            'cons_pac.required' => 'Campo obrigátorio.',
+            'vinculo_id.required' => 'Campo obrigátorio.',
+            'particular.required' => 'Campo obrigátorio.',
+            'data.date_format' => 'Campo invalido! Formato de exemplo: 14/11/1994.',
+            'hora.date_format' => 'Campo invalido! Formato de exemplo: 12:59:12.',
         ];
     }
 }

@@ -2,9 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
 class EspecialidadeController extends Controller
 {
-    //
+    public function listar(Request $request)
+    {
+        $registrosPorPagina = $request->registro_por_pagina;
+        $medicos = Especialidade::paginate($registrosPorPagina);
+
+        return response($medicos, 200);
+    }
+
+    public function cadastrar(Request $request)
+    {
+
+        $especialidade = Especialidade::create([
+            'espec_nome' => $request->espec_nome,
+        ]);
+
+        return response(['especialidade' =>  $especialidade], 201);
+    }
+
+
+    public function buscarEspecialidade($nome)
+    {
+
+        $especialidade = Especialidade::where('espec_nome', 'LIKE', '%' . $nome . '%')->get();
+
+        if (isset($especialidade[0]) == '') {
+            return response(['status' => 'Especialidade não encontrado.'], 404);
+        }
+
+        return response($especialidade, 200);
+    }
+
+    public function editar(Request $request, $id)
+    {
+        $especialidade = Especialidade::where('espec_codigo', $id)->first();
+
+        if (!$especialidade) {
+            return response(['status' => 'Especialidade não encontrado.'], 404);
+        }
+
+        $especialidade->update([
+            'espec_nome' => $request->espec_nome ? $request->espec_nome : $especialidade->espec_nome,
+        ]);
+
+        return response($especialidade, 200);
+    }
+
+    public function deletar($id)
+    {
+        $especialidade =  Especialidade::where('espec_codigo', $id)->first();
+        if (!$especialidade) {
+            return response(['status' => 'Especialidade não encontrado nos registros.'], 404);
+        }
+
+        $especialidade->delete();
+
+        return response(['status' => 'Especialidade deletado com sucesso.'], 200);
+    }
 }

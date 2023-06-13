@@ -14,14 +14,14 @@ class CreateVinculosTable extends Migration
     public function up()
     {
         Schema::create('vinculos', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('vinc_codigo');
             $table->unsignedBigInteger('paciente_id');
             $table->unsignedBigInteger('plano_saude_id');
             $table->uuid('nr_contrato');
             $table->timestamps();
 
-            $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
-            $table->foreign('plano_saude_id')->references('id')->on('plano_saudes')->onDelete('cascade');
+            $table->foreign('paciente_id')->references('pac_codigo')->on('pacientes')->onDelete('cascade');
+            $table->foreign('plano_saude_id')->references('plano_codigo')->on('plano_saudes')->onDelete('cascade');
         });
     }
 

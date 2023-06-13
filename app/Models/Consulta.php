@@ -8,14 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Consulta extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['cons_codigo','pac_id', 'proc_id','med_id','particula','cons_data','cons_hora'];
+    protected $primaryKey = 'cons_codigo';
+    protected $fillable = ['cons_codigo', 'cons_med','particular','data','hora', 'cons_pac', 'vinculo_id'];
+    protected $hidden = ['cons_codigo', 'cons_med','cons_pac', 'vinculo_id', 'created_at', 'updated_at'];
 
     public function medico(){
-        return $this->hasOne(Medico::class, 'id', 'med_id');
+        return $this->hasOne(Medico::class, 'med_codigo', 'cons_med')->with('especialidade');
     }
 
-    public function procedimento(){
-        return $this->hasOne(Procedimento::class, 'id', 'proc_id');
+
+    public function vinculo(){
+        return $this->hasOne(Vinculo::class, 'vinc_codigo', 'vinculo_id')->with('planoSaude', 'paciente');
+    }
+
+    public function paciente(){
+        return $this->hasOne(Paciente::class, 'pac_codigo', 'cons_pac');
     }
 }

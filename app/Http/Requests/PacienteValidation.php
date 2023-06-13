@@ -24,28 +24,19 @@ class PacienteValidation extends FormRequest
     public function rules()
     {
         return [
-         'paciente' => 'required',
-         'paciente.pac_nome' => 'required',
-         'paciente.pac_telefone' => 'required|unique:pacientes,pac_telefone|telefone_com_ddd',
-         'paciente.pac_dataNascimento' => 'required|date_format:d/m/Y',
-         'planos_de_saude.*.plano_telefone' => 'telefone_com_ddd',
+         'pac_nome' => 'required',
+         'pac_telefone' => 'required|unique:pacientes,pac_telefone|telefone_com_ddd',
+         'pac_dataNascimento' => 'required|date_format:d/m/Y',
         ];
     }
 
     public function messages()
     {
         return [
-            'paciente.required' => 'Objeto obrigátorio.',
-            'paciente.pac_nome.required' => 'Campo obrigátorio.',
-            'paciente.pac_dataNascimento.required' => 'Campo obrigátorio.',
-            'paciente.pac_dataNascimento.date_format' => 'Campo invalido! formato de exemplo: 01/12/1998.',
-            'paciente.pac_telefone.unique' => 'Paciente com esse numero de telefone já existe.',
-            'paciente.pac_telefone.telefone_com_ddd' => 'Campo invalido! Exemplo valido: (99)9999-9999.',
-            'paciente.pac_telefone.required' => 'Campo obrigátorio.',
-            'planos_de_saude.required' => 'Objeto obrigátorio.',
-            'planos_de_saude.plano_descricao.required' => 'campo obrigátorio.',
-            'planos_de_saude.plano_telefone.required' => 'campo obrigátorio.',
-            'planos_de_saude.*.plano_telefone.telefone_com_ddd' => 'Campo invalido! Exemplo valido: (99)9999-9999.',
+            'pac_nome.required' => 'Campo obrigátorio.',
+            'pac_telefone.telefone_com_ddd' => 'Campo invalido! formato de exemplo: (99)9899-9548.',
+            'pac_dataNascimento.required' => 'Campo obrigátorio.',
+            'pac_dataNascimento.date_format' => 'Campo invalido! formato de exemplo: 01/12/1998.',
 
         ];
     }

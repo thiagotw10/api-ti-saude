@@ -9,21 +9,23 @@ use Illuminate\Http\Request;
 
 class ProcedimentoController extends Controller
 {
-    public function listar(Request $request){
+    public function listar(Request $request)
+    {
         $registrosPorPagina = $request->registro_por_pagina;
         $medicos = Procedimento::with('especialidade')->paginate($registrosPorPagina);
 
         return response($medicos, 200);
     }
 
-    public function cadastrar(ProcedimentoValidation $request){
+    public function cadastrar(ProcedimentoValidation $request)
+    {
 
         $especialidade = null;
         $espec = Especialidade::where('espec_codigo', $request->espec_codigo)->get();
-        if(isset($espec[0]))
-        $especialidade = Especialidade::find($espec[0]->id);
+        if (isset($espec[0]))
+            $especialidade = Especialidade::find($espec[0]->id);
 
-        if(!$especialidade){
+        if (!$especialidade) {
             $especilidadeAll = Especialidade::all();
             return response(['especialidades' => $especilidadeAll], 400);
         }

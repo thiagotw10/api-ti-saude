@@ -14,8 +14,7 @@ class CreatePlanoSaudesTable extends Migration
     public function up()
     {
         Schema::create('plano_saudes', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('plano_codigo');
+            $table->bigIncrements('plano_codigo');
             $table->string('plano_descricao');
             $table->string('plano_telefone');
             $table->timestamps();

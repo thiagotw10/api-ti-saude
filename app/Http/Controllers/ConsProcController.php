@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vinculo;
+use App\Models\Cons_proc;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
-class VinculoController extends Controller
+class ConsProcController extends Controller
 {
-    public function vinculo(Request $request)
+    public function marcarConsulta(Request $request)
     {
 
         try {
-            $vinculo = Vinculo::create([
-                'paciente_id' => $request->paciente_id,
-                'plano_saude_id' => $request->plano_saude_id,
-                'nr_contrato' => $request->nr_contrato,
+            $consulta = Cons_proc::create([
+                'procedimento_id' => $request->data,
+                'consulta_id' => $request->hora,
             ]);
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1];
@@ -29,6 +28,6 @@ class VinculoController extends Controller
             return response(['status' => 'Ocorreu um erro durante a criação do vínculo.'], 500);
         }
 
-        return response($vinculo, 201);
+        return response($consulta, 201);
     }
 }

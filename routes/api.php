@@ -1,13 +1,17 @@
 <?php
 
 use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\ConsProcController;
 use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\PlanoSaudeController;
 use App\Http\Controllers\ProcedimentoController;
 use App\Http\Controllers\ProdutosPainelController;
 use App\Http\Controllers\SeguimentoProdutosPainelController;
 use App\Http\Controllers\UsuarioAdministradorController;
+use App\Http\Controllers\VinculoController;
 use App\Models\Clientes;
 use App\Models\Consulta;
 use App\Models\Paciente;
@@ -37,34 +41,48 @@ Route::post('pacientes', [PacienteController::class, 'cadastrar']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
 
-
-    Route::get('pacientes', [PacienteController::class, 'listar']);
+    // pacientes
+    Route::post('pacientes/listar', [PacienteController::class, 'listar']);
     Route::get('pacientes/{nome}', [PacienteController::class, 'buscarPaciente']);
     Route::put('pacientes/{id}', [PacienteController::class, 'editar']);
     Route::delete('pacientes/{id}', [PacienteController::class, 'deletar']);
 
-    Route::get('medicos', [MedicoController::class, 'listar']);
+    // plano saude
+    Route::post('planosaude/listar', [PlanoSaudeController::class, 'listar']);
+    Route::get('planosaude/{nome}', [PlanoSaudeController::class, 'buscarPlanoSaude']);
+    Route::put('planosaude/{id}', [PlanoSaudeController::class, 'editar']);
+    Route::delete('planosaude/{id}', [PlanoSaudeController::class, 'deletar']);
+    Route::post('planosaude', [PlanoSaudeController::class, 'cadastrar']);
+
+    // ConsProc
+    Route::post('vinculo', [VinculoController::class, 'vinculo']);
+
+    // medicos
+    Route::post('medicos/listar', [MedicoController::class, 'listar']);
     Route::get('medicos/{nome}', [MedicoController::class, 'buscarMedico']);
     Route::post('medicos', [MedicoController::class, 'cadastrar']);
     Route::put('medicos/{id}', [MedicoController::class, 'editar']);
     Route::delete('medicos/{id}', [MedicoController::class, 'deletar']);
 
+    // procedimentos
     Route::get('procedimentos', [ProcedimentoController::class, 'listar']);
     Route::get('procedimentos/{nome}', [ProcedimentoController::class, 'buscarProcedimento']);
     Route::post('procedimentos', [ProcedimentoController::class, 'cadastrar']);
     Route::put('procedimentos/{id}', [ProcedimentoController::class, 'editar']);
     Route::delete('procedimentos/{id}', [ProcedimentoController::class, 'deletar']);
 
+    // consultas
     Route::get('consultas', [ConsultaController::class, 'listar']);
     Route::post('consultas', [ConsultaController::class, 'cadastrarConsulta']);
+
+    // ConsProc
+    Route::post('consultas/marcar', [ConsProcController::class, 'marcarConsulta']);
+
+    // especialidade
+    Route::post('especialidades/listar', [EspecialidadeController::class, 'listar']);
+    Route::get('especialidades/{nome}', [EspecialidadeController::class, 'buscarEspecialidade']);
+    Route::post('especialidades', [EspecialidadeController::class, 'cadastrar']);
+    Route::put('especialidades/{id}', [EspecialidadeController::class, 'editar']);
+    Route::delete('especialidades/{id}', [EspecialidadeController::class, 'deletar']);
 });
 
-
-$pacientes = Paciente::all();
-foreach ($pacientes as $paciente) {
-    Route::middleware(['auth:sanctum', 'abilities:id:' . $paciente->pac_codigo])->group(function () use ($paciente) {
-        $nome = str_replace(' ', '-', strtolower($paciente->pac_nome));
-        Route::get('consultas/' . $nome . '/' . $paciente->pac_codigo, [ConsultaController::class, 'listarConsultasMarcadas']);
-        Route::post('consultas/' . $nome . '/' . $paciente->pac_codigo, [ConsultaController::class, 'MarcarConsulta']);
-    });
-}

@@ -14,14 +14,11 @@ class CreateProcedimentosTable extends Migration
     public function up()
     {
         Schema::create('procedimentos', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('proc_codigo');
-            $table->unsignedBigInteger('espec_id');
+            $table->bigIncrements('proc_codigo');
             $table->string('proc_nome');
             $table->string('proc_valor');
             $table->timestamps();
 
-            $table->foreign('espec_id')->references('id')->on('especialidades')->onDelete('cascade');
         });
     }
 
