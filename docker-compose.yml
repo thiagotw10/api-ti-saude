@@ -41,5 +41,6 @@ services:
     restart: always
     env_file:
       - .env
+    command: sh -c "while ! nc -z db 3306; do sleep 1; done; php artisan migrate"
 volumes:
   dbdata:
