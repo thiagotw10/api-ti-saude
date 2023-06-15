@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Cons_proc extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['consulta_id', 'procedimento_id'];
 }

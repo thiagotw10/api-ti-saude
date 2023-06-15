@@ -17,7 +17,7 @@ class CreateConsultasTable extends Migration
             $table->bigIncrements('cons_codigo');
             $table->unsignedBigInteger('cons_pac');
             $table->unsignedBigInteger('cons_med');
-            $table->unsignedBigInteger('vinculo_id');
+            $table->unsignedBigInteger('vinculo_id')->nullable();
             $table->string('data');
             $table->string('hora');
             $table->string('particular')->default('0');

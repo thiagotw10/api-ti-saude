@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlanosaudeValidation extends FormRequest
+class EspecialidadeValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,15 @@ class PlanosaudeValidation extends FormRequest
     public function rules()
     {
         return [
-         'plano_descricao' => 'required|unique:plano_saudes',
-         'plano_telefone' => 'required|unique:plano_saudes',
+            'espec_nome' => 'required|string|unique:especialidades',
         ];
     }
 
     public function messages()
     {
         return [
-            'plano_descricao.required' => 'Campo obrigátorio.',
-            'plano_descricao.unique' => 'Já existe um plano_descricao com esse nome',
-            'plano_telefone.unique' => 'Já existe um plano_telefone com esse telefone',
+            'espec_nome.required' => 'Campo obrigátorio.',
+            'espec_nome.unique' => 'Esse nome de especialidade já existe.',
         ];
     }
 }

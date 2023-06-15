@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EspecialidadeValidation;
 use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class EspecialidadeController extends Controller
         return response($medicos, 200);
     }
 
-    public function cadastrar(Request $request)
+    public function cadastrar(EspecialidadeValidation $request)
     {
 
         $especialidade = Especialidade::create([
@@ -26,12 +27,12 @@ class EspecialidadeController extends Controller
     }
 
 
-    public function buscarEspecialidade($nome)
+    public function buscarEspecialidade($id)
     {
 
-        $especialidade = Especialidade::where('espec_nome', 'LIKE', '%' . $nome . '%')->get();
+        $especialidade = Especialidade::where('espec_codigo', $id)->first();
 
-        if (isset($especialidade[0]) == '') {
+        if (!$especialidade) {
             return response(['status' => 'Especialidade não encontrado.'], 404);
         }
 

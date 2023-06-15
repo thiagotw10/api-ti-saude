@@ -26,12 +26,12 @@ class PlanoSaudeController extends Controller
         return response(['PlanoSaude' => $PlanoSaude], 201);
     }
 
-    public function buscarPlanoSaude($nome)
+    public function buscarPlanoSaude($id)
     {
 
-        $PlanoSaude = PlanoSaude::where('plano_descricao', 'LIKE', '%' . $nome . '%')->get();
+        $PlanoSaude = PlanoSaude::where('plano_codigo', $id)->first();
 
-        if (isset($PlanoSaude[0]) == '') {
+        if (!$PlanoSaude) {
             return response(['status' => 'PlanoSaude não encontrado.'], 404);
         }
 
@@ -48,7 +48,7 @@ class PlanoSaudeController extends Controller
 
         $PlanoSaude->update([
             'plano_descricao' => $request->plano_descricao ? $request->plano_descricao : $PlanoSaude->plano_descricao,
-            'plano_telefone' => $request->plano_descricao ?  $request->plano_descricao :  $PlanoSaude->plano_descricao,
+            'plano_telefone' => $request->plano_telefone ?  $request->plano_telefone :  $PlanoSaude->plano_telefone,
         ]);
 
         return response($PlanoSaude, 200);

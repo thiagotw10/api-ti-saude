@@ -24,11 +24,10 @@ class ConsultaValidation extends FormRequest
     public function rules()
     {
         return [
-         'data' => 'required|date_format:d/m/Y',
-         'hora' => 'required|date_format:H:i:s',
+         'data' => 'required',
+         'hora' => 'required',
          'cons_med' => 'required',
          'cons_pac' => 'required',
-         'vinculo_id' => 'required',
          'particular' => 'required',
         ];
     }
@@ -42,8 +41,6 @@ class ConsultaValidation extends FormRequest
             'cons_pac.required' => 'Campo obrigátorio.',
             'vinculo_id.required' => 'Campo obrigátorio.',
             'particular.required' => 'Campo obrigátorio.',
-            'data.date_format' => 'Campo invalido! Formato de exemplo: 14/11/1994.',
-            'hora.date_format' => 'Campo invalido! Formato de exemplo: 12:59:12.',
         ];
     }
 }

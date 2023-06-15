@@ -15,4 +15,6 @@ class Paciente extends Model
        'pac_codigo', 'pac_nome', 'pac_telefone', 'pac_dataNascimento'
     ];
 
+
+
 }

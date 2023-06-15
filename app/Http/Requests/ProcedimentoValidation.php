@@ -26,7 +26,6 @@ class ProcedimentoValidation extends FormRequest
         return [
             'proc_nome' => 'required|string|unique:procedimentos',
             'proc_valor' => 'required|integer',
-            'espec_codigo' => 'required'
         ];
     }
 
@@ -34,7 +33,6 @@ class ProcedimentoValidation extends FormRequest
     {
         return [
             'proc_nome.required' => 'Campo obrigátorio.',
-            'espec_id.required' => 'Campo obrigátorio.',
             'proc_nome.unique' => 'Esse nome de procedimento já existe.',
             'proc_valor.required' => 'Campo obrigátorio.',
             'proc_valor.integer' => 'Campo invalido! Exemplo: 200.',

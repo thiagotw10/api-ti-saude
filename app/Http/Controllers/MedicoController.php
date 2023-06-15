@@ -49,12 +49,12 @@ class MedicoController extends Controller
     }
 
 
-    public function buscarMedico($nome)
+    public function buscarMedico($id)
     {
 
-        $medico = Medico::with('especialidade')->where('med_nome', 'LIKE', '%' . $nome . '%')->get();
+        $medico = Medico::with('especialidade')->where('med_codigo', $id)->first();
 
-        if (isset($medico[0]) == '') {
+        if (!$medico) {
             return response(['status' => 'Médico não encontrado.'], 404);
         }
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\ConsultaMarcadas;
 use App\Http\Requests\PacienteValidation;
 use App\Http\Requests\PacientePaginacaoValidation;
+use Illuminate\Support\Facades\DB;
 
 class PacienteController extends Controller
 {
@@ -17,6 +18,12 @@ class PacienteController extends Controller
     {
         $registrosPorPagina = $request->registro_por_pagina;
         $pacientes = Paciente::paginate($registrosPorPagina);
+        foreach ($pacientes as $paciente) {
+            $vinculo = Vinculo::where('paciente_id', $paciente->pac_codigo)->first();
+            if ($vinculo) {
+                $paciente->vinculo_codigo = $vinculo->vinc_codigo;
+            }
+        }
 
         return response($pacientes, 200);
     }
@@ -29,15 +36,27 @@ class PacienteController extends Controller
             'pac_telefone' => $request->pac_telefone
         ]);
 
+        if ($request->plano_saude) {
+            Vinculo::create([
+                'paciente_id' => $paciente->pac_codigo,
+                'plano_saude_id' => $request->plano_saude,
+                'nr_contrato' => DB::raw('CONCAT("CON-", LPAD(RAND() * 1000000, 6, "0"))')
+            ]);
+        }
+
         return response(['paciente' => $paciente], 201);
     }
 
-    public function buscarPaciente($nome)
+    public function buscarPaciente($id)
     {
 
-        $paciente = Paciente::where('pac_nome', 'LIKE', '%' . $nome . '%')->get();
+        $paciente = Paciente::where('pac_codigo', $id)->first();
+        $vinculo = Vinculo::where('paciente_id', $paciente->pac_codigo)->first();
+        if ($vinculo) {
+            $paciente->plano_codigo = $vinculo->plano_saude_id;
+        }
 
-        if (isset($paciente[0]) == '') {
+        if (!$paciente) {
             return response(['status' => 'Paciente não encontrado.'], 404);
         }
 
@@ -57,6 +76,23 @@ class PacienteController extends Controller
             'pac_telefone' => $request->pac_telefone ?  $request->pac_telefone :  $paciente->pac_telefone,
             'pac_dataNascimento' => $request->pac_dataNascimento ?  $request->pac_dataNascimento :  $paciente->pac_dataNascimento
         ]);
+
+        if ($request->plano_saude) {
+            $vinculo = Vinculo::where('paciente_id', $id)->first();
+            if ($vinculo) {
+                $vinculo->update([
+                    'paciente_id' => $paciente->pac_codigo,
+                    'plano_saude_id' => $request->plano_saude,
+                    'nr_contrato' => $vinculo->nr_contrato
+                ]);
+            } else {
+                Vinculo::create([
+                    'paciente_id' => $paciente->pac_codigo,
+                    'plano_saude_id' => $request->plano_saude,
+                    'nr_contrato' => DB::raw('CONCAT("CON-", LPAD(RAND() * 1000000, 6, "0"))')
+                ]);
+            }
+        }
 
         return response($paciente, 200);
     }

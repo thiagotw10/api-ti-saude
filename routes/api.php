@@ -43,13 +43,13 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     // pacientes
     Route::post('pacientes/listar', [PacienteController::class, 'listar']);
-    Route::get('pacientes/{nome}', [PacienteController::class, 'buscarPaciente']);
+    Route::get('pacientes/{id}', [PacienteController::class, 'buscarPaciente']);
     Route::put('pacientes/{id}', [PacienteController::class, 'editar']);
     Route::delete('pacientes/{id}', [PacienteController::class, 'deletar']);
 
     // plano saude
     Route::post('planosaude/listar', [PlanoSaudeController::class, 'listar']);
-    Route::get('planosaude/{nome}', [PlanoSaudeController::class, 'buscarPlanoSaude']);
+    Route::get('planosaude/{id}', [PlanoSaudeController::class, 'buscarPlanoSaude']);
     Route::put('planosaude/{id}', [PlanoSaudeController::class, 'editar']);
     Route::delete('planosaude/{id}', [PlanoSaudeController::class, 'deletar']);
     Route::post('planosaude', [PlanoSaudeController::class, 'cadastrar']);
@@ -59,30 +59,31 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     // medicos
     Route::post('medicos/listar', [MedicoController::class, 'listar']);
-    Route::get('medicos/{nome}', [MedicoController::class, 'buscarMedico']);
+    Route::get('medicos/{id}', [MedicoController::class, 'buscarMedico']);
     Route::post('medicos', [MedicoController::class, 'cadastrar']);
     Route::put('medicos/{id}', [MedicoController::class, 'editar']);
     Route::delete('medicos/{id}', [MedicoController::class, 'deletar']);
 
     // procedimentos
-    Route::get('procedimentos', [ProcedimentoController::class, 'listar']);
+    Route::post('procedimentos/listar', [ProcedimentoController::class, 'listar']);
     Route::get('procedimentos/{nome}', [ProcedimentoController::class, 'buscarProcedimento']);
     Route::post('procedimentos', [ProcedimentoController::class, 'cadastrar']);
     Route::put('procedimentos/{id}', [ProcedimentoController::class, 'editar']);
     Route::delete('procedimentos/{id}', [ProcedimentoController::class, 'deletar']);
 
     // consultas
-    Route::get('consultas', [ConsultaController::class, 'listar']);
+    Route::post('consultas/listar', [ConsultaController::class, 'listar']);
+    Route::get('consultas/{id}', [ConsultaController::class, 'buscarConsulta']);
     Route::post('consultas', [ConsultaController::class, 'cadastrarConsulta']);
+    Route::delete('consultas/{id}', [ConsultaController::class, 'deletar']);
 
     // ConsProc
     Route::post('consultas/marcar', [ConsProcController::class, 'marcarConsulta']);
 
     // especialidade
     Route::post('especialidades/listar', [EspecialidadeController::class, 'listar']);
-    Route::get('especialidades/{nome}', [EspecialidadeController::class, 'buscarEspecialidade']);
+    Route::get('especialidades/{id}', [EspecialidadeController::class, 'buscarEspecialidade']);
     Route::post('especialidades', [EspecialidadeController::class, 'cadastrar']);
     Route::put('especialidades/{id}', [EspecialidadeController::class, 'editar']);
     Route::delete('especialidades/{id}', [EspecialidadeController::class, 'deletar']);
 });
-
