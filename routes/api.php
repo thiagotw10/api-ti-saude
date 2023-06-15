@@ -74,6 +74,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     // consultas
     Route::post('consultas/listar', [ConsultaController::class, 'listar']);
     Route::get('consultas/{id}', [ConsultaController::class, 'buscarConsulta']);
+    Route::put('consultas/{id}', [ConsultaController::class, 'editar']);
     Route::post('consultas', [ConsultaController::class, 'cadastrarConsulta']);
     Route::delete('consultas/{id}', [ConsultaController::class, 'deletar']);
 
